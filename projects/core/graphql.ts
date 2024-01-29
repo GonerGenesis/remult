@@ -1212,6 +1212,9 @@ function getGraphqlBaseType(field: FieldMetadata) {
               else type = 'Float'
             }
             break
+            case Array<Number>:
+              type = '[Float]'
+              break
         }
   return type
 }
