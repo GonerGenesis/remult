@@ -1198,24 +1198,24 @@ function fieldFormat(field: Field) {
 
 function getGraphqlBaseType(field: FieldMetadata) {
   let type = 'String'
-        switch (field.valueType) {
-          case Boolean:
-            type = 'Boolean'
-            break
-          case Number:
-            {
-              if (
-                field.valueConverter?.fieldTypeInDb === 'integer' ||
-                field.valueConverter?.fieldTypeInDb === 'autoincrement'
-              )
-                type = 'Int'
-              else type = 'Float'
-            }
-            break
-            case Array<Number>:
-              type = '[Float]'
-              break
-        }
+  switch (field.valueType) {
+    case Boolean:
+      type = 'Boolean'
+      break
+    case Number:
+      {
+        if (
+          field.valueConverter?.fieldTypeInDb === 'integer' ||
+          field.valueConverter?.fieldTypeInDb === 'autoincrement'
+        )
+          type = 'Int'
+        else type = 'Float'
+      }
+      break
+    case Array<Number> || Array<number>:
+      type = '[Float]'
+      break
+  }
   return type
 }
 
