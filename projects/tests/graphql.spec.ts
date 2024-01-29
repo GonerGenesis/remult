@@ -23,6 +23,15 @@ class CategoryMore {
   @Fields.string()
   moreInfo = ''
 
+  // @Fields.json({ allowNull: true, inputType: 'number[]', valueType:Array<Number>, valueConverter: { toJson: (val)  => val.join(',')}})
+  @Fields.json({
+    allowNull: true, inputType: 'number[]', valueType: Array<Number>, valueConverter: {
+      toJson: (val) => Array.isArray(val) ? val.join(",") : val,
+      fromJson: (val) => typeof val === 'string' ? val.split(',').map(Number) : val
+    }
+  })
+  arrayStuff?: number[]
+
   @Fields.string({ allowNull: true })
   category_id = ''
   @Relations.toOne(() => Category, { field: 'category_id', allowNull: true })
@@ -142,11 +151,11 @@ describe('graphql', () => {
 
     const catMore = await remult
       .repo(CategoryMore)
-      .insert([{ moreInfo: 'more info for c1', category_id: cat[0].id }])
+      .insert([{ moreInfo: 'more info for c1', category_id: cat[0].id, arrayStuff: [1, 2, 3] }])
 
     await remult.repo(Task).insert({
       title: 'task a',
-      category: cat[0],
+      category: cat[0],ii
       category2: cat[1],
       category3_id: cat[1].id,
     })
@@ -168,6 +177,7 @@ describe('graphql', () => {
             id
             nodeId
             categorymore{
+              arrayStuff
               id
               nodeId
               moreInfo
@@ -1246,6 +1256,7 @@ describe('graphql', () => {
       type CategoryMore implements Node {
           id: String!
           moreInfo: String!
+          arrayStuff: String
           category_id: String
           category: Category
           nodeId: ID!
@@ -1254,12 +1265,14 @@ describe('graphql', () => {
       input categoriesmoreOrderBy {
         id: OrderByDirection
         moreInfo: OrderByDirection
+        arrayStuff: OrderByDirection
         category_id: OrderByDirection
       }
 
       input categoriesmoreWhere {
         id: WhereString
         moreInfo: WhereString
+        arrayStuff: WhereStringNullable
         category_id: WhereStringNullable
         OR: [categoriesmoreWhere!]
       }
@@ -1271,6 +1284,7 @@ describe('graphql', () => {
 
       input CreateCategoryMoreInput {
           moreInfo: String
+          arrayStuff: String
           category_id: String
       }
 
@@ -1282,6 +1296,7 @@ describe('graphql', () => {
 
       input UpdateCategoryMoreInput {
           moreInfo: String
+          arrayStuff: String
           category_id: String
       }
 

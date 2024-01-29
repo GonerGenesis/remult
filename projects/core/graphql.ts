@@ -1198,6 +1198,7 @@ function fieldFormat(field: Field) {
 
 function getGraphqlBaseType(field: FieldMetadata) {
   let type = 'String'
+  // console.log("field", field)
   switch (field.valueType) {
     case Boolean:
       type = 'Boolean'
@@ -1212,9 +1213,11 @@ function getGraphqlBaseType(field: FieldMetadata) {
         else type = 'Float'
       }
       break
-    case Array<Number> || Array<number>:
-      type = '[Float]'
-      break
+    // case Array:
+    //   console.log('field is array')
+    //   console.log(field)
+    //   type = '[Float]'
+    //   break
   }
   return type
 }
